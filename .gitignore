@@ -4,6 +4,7 @@ node_modules/
 # Entornos y variables sensibles
 .env
 BACK/config/.env
+aiven-ca.pem
 
 # Archivos de logs
 logs
