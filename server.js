@@ -36,7 +36,7 @@ app.use("/api/orders", authMiddleware, orderRoutes);
 app.use("/api/transactions", authMiddleware, transactionRoutes);
 app.use("/api/inventory", authMiddleware, inventoryRoutes);
 app.use("/api/accounting", authMiddleware, accountingRoutes);
-app.use("/api/items", authMiddleware, itemRoutes);
+app.use("/api/items", itemRoutes);
 
 //handle 404 errors
 app.use((req, res, next) => {
