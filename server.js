@@ -13,12 +13,13 @@ import createAssociations from "./BACK/models/associations.js";
 import accountingRoutes from "./BACK/routes/accountingRoutes.js";
 import inventoryRoutes from "./BACK/routes/inventoryRoutes.js";
 import itemRoutes from "./BACK/routes/itemRoutes.js";
+import reportRoutes from "./BACK/routes/reportRoutes.js";
+
 
 
 // Middlewares
 import errorMiddleware from "./BACK/middlewares/errorMiddleware.js";
 import authMiddleware from "./BACK/middlewares/authMiddleware.js";
-import { Association } from "sequelize";
 
 dotenv.config();
 const app = express();
@@ -37,6 +38,8 @@ app.use("/api/transactions", authMiddleware, transactionRoutes);
 app.use("/api/inventory", authMiddleware, inventoryRoutes);
 app.use("/api/accounting", authMiddleware, accountingRoutes);
 app.use("/api/items", authMiddleware, itemRoutes);
+app.use("/api/reports", authMiddleware, reportRoutes);
+
 
 //handle 404 errors
 app.use((req, res, next) => {
