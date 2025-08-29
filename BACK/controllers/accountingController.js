@@ -10,10 +10,10 @@ import { computeDailyReport } from "../services/accountingService.js";
  */
 export async function getDailyReport(req, res) {
   try {
-    // -- Si no llega 'date', usamos la fecha de hoy en Bogotá
+    // -- If 'date' does not arrive, we use today's date in Bogotá
     const tzOffset = -5; // Bogotá UTC-5 sin DST
     const now = new Date();
-    // Convertimos "hoy" a YYYY-MM-DD en Bogotá
+    //We convert "today" to YYYY-MM-DD in Bogotá
     const bogotaNow = new Date(now.getTime() + (tzOffset * 60 - now.getTimezoneOffset()) * 60000);
     const todayISO = bogotaNow.toISOString().slice(0, 10);
 

@@ -1,5 +1,3 @@
-// BACK/routes/inventoryRoutes.js
-
 import e from "express";
 import authMiddleware from "../middlewares/authMiddleware.js";
 import { authorizeRoles } from "../middlewares/roleMiddleware.js";
@@ -15,7 +13,7 @@ import {
 
 const router = e.Router();
 
-// Todas las rutas requieren autenticación
+// All routes require authentication
 router.use(authMiddleware);
 
 // CRUD
@@ -25,7 +23,7 @@ router.get("/:id", authorizeRoles("admin", "seller"), getInventory);
 router.put("/:id", authorizeRoles("admin", "seller"), updateInventoryController);
 router.delete("/:id", authorizeRoles("admin"), deleteInventoryController);
 
-// Alertas
+// Alerts
 router.get("/alerts/low-stock", authorizeRoles("admin", "seller"), lowStockAlert);
 
 export default router;

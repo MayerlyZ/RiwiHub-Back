@@ -1,19 +1,19 @@
 import * as cartService from "../services/cartService.js";
 import { isPositiveNumber } from "../utils/validators.js";
 
-//añadir item al carrito
+//add item to cart
 export const addItemToCart = async (req, res) => {
   const user_id = req.user.id;
   const { item_id, quantity } = req.body;
 
   if(!item_id || !isPositiveNumber(quantity)) {
-    return res.status(400).json({ message: "El item_id es requerido y debe ser un número positivo." });
+    return res.status(400).json({ message: "The item_id is required and must be a positive number." });
   }
     try {
     const cartItem = await cartService.addItemToCart(user_id, item_id, quantity);
     res.status(201).json(cartItem);
   } catch (error) {
-    res.status(500).json({ error: "Error al agregar item al carrito" });
+    res.status(500).json({ error: "Error adding item to cart" });
   }
 
 };
@@ -44,10 +44,10 @@ export const getCartContents = async (req, res) => {
   const user_id = req.user.id;
   
   try {
-    const cart = await cartService.getCartByUserId(user_id); // Busca si el usuario tiene carrito
+    const cart = await cartService.getCartByUserId(user_id); //Check if the user has a cart
 
     if (cart) {
-      res.status(200).json(cart.items); // Trae el carrito del usuario 
+      res.status(200).json(cart.items); // Get the user's cart
     } else {
       res.status(404).json({ message: 'Cart not found' });
     }

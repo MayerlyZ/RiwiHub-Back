@@ -45,18 +45,18 @@ export const deleteUser = async (req, res) => {
 // Create a new user
 export const createUser = async (req, res) => {
   const { name, email, password, wallet_balance, role } = req.body;
-  // Validaciones
+  // Validations
   if (!isNonEmptyString(name)) {
-    return res.status(400).json({ error: "El nombre es requerido y debe ser un string válido." });
+    return res.status(400).json({ error: "The name is required and must be a valid string." });
   }
   if (!isValidEmail(email)) {
-    return res.status(400).json({ error: "El email no es válido." });
+    return res.status(400).json({ error: "The email is not valid." });
   }
   if (!isNonEmptyString(password)) {
-    return res.status(400).json({ error: "La contraseña es requerida." });
+    return res.status(400).json({ error: "The password is required and must be a valid string." });
   }
   if (wallet_balance !== undefined && !isPositiveNumber(Number(wallet_balance))) {
-    return res.status(400).json({ error: "El saldo debe ser un número positivo." });
+    return res.status(400).json({ error: "The wallet_balance must be a positive number." });
   }
   try {
     const newUser = await userService.createUser({
@@ -64,7 +64,7 @@ export const createUser = async (req, res) => {
       email,
       password,
       wallet_balance,
-      role, // Si no se envía, Sequelize usará el valor por defecto
+      role, // If not provided, Sequelize will use the default value
     });
     res.status(201).json(newUser);
   } catch (error) {
@@ -78,21 +78,21 @@ export const updateUser = async (req, res) => {
   const { id } = req.params;
   const { name, email, password, wallet_balance, role } = req.body;
 
-  // Validaciones (solo si los campos vienen en el body)
+  // Validations (only if fields are present in the body)
   if (name !== undefined && !isNonEmptyString(name)) {
-    return res.status(400).json({ error: "El nombre debe ser un string válido." });
+    return res.status(400).json({ error: "The name must be a valid string." });
   }
   if (email !== undefined && !isValidEmail(email)) {
-    return res.status(400).json({ error: "El email no es válido." });
+    return res.status(400).json({ error: "The email is not valid." });
   }
   if (password !== undefined && !isNonEmptyString(password)) {
-    return res.status(400).json({ error: "La contraseña debe ser un string válido." });
+    return res.status(400).json({ error: "The password must be a valid string." });
   }
   if (wallet_balance !== undefined && !isPositiveNumber(Number(wallet_balance))) {
-    return res.status(400).json({ error: "El saldo debe ser un número positivo." });
+    return res.status(400).json({ error: "The wallet_balance must be a positive number." });
   }
 
-  // Construye el objeto data solo con los campos enviados
+  // Build the data object only with the fields sent
   const data = {};
   if (name !== undefined) data.name = name;
   if (email !== undefined) data.email = email;

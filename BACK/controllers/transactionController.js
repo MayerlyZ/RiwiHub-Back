@@ -1,7 +1,7 @@
 import * as tokenService from "../services/tokenService.js";
 import { isPositiveNumber, isInEnum, isNonEmptyString } from "../utils/validators.js";
 
-// Obtener todas las transacciones
+//Get all transactions
 export const getAllTransactions = async (req, res) => {
   try {
     const transactions = await tokenService.getAllTransactions();
@@ -12,7 +12,7 @@ export const getAllTransactions = async (req, res) => {
   }
 };
 
-// Obtener una transacción por ID
+//Get a transaction by ID
 export const getTransactionById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -27,23 +27,23 @@ export const getTransactionById = async (req, res) => {
   }
 };
 
-// Crear una nueva transacción
+//Create a new transaction
 export const createTransaction = async (req, res) => {
   const { user_id, amount, transaction_type, description, balance_after } = req.body;
   if (!isPositiveNumber(Number(user_id))) {
-    return res.status(400).json({ error: "El user_id es requerido y debe ser un número positivo." });
+    return res.status(400).json({ error: "The user_id is required and must be a positive number." });
   }
   if (!isPositiveNumber(Number(amount))) {
-    return res.status(400).json({ error: "El amount debe ser un número positivo." });
+    return res.status(400).json({ error: "The amount must be a positive number." });
   }
   if (!isInEnum(transaction_type, ["earn", "spend", "refund"])) {
-    return res.status(400).json({ error: "El tipo de transacción no es válido." });
+    return res.status(400).json({ error: "The transaction type is not valid." });
   }
   if (description !== undefined && description !== null && !isNonEmptyString(description)) {
-    return res.status(400).json({ error: "La descripción debe ser un string válido o null." });
+    return res.status(400).json({ error: "The description must be a valid string or null." });
   }
   if (!isPositiveNumber(Number(balance_after))) {
-    return res.status(400).json({ error: "El balance_after debe ser un número positivo." });
+    return res.status(400).json({ error: "The balance_after must be a positive number." });
   }
   const data = {};
   if (user_id !== undefined) data.user_id = user_id;
@@ -61,21 +61,21 @@ export const createTransaction = async (req, res) => {
   }
 };
 
-// Actualizar una transacción
+// Update a transaction
 export const updateTransaction = async (req, res) => {
   const { id } = req.params;
   const { amount, transaction_type, description, balance_after } = req.body;
   if (amount !== undefined && !isPositiveNumber(Number(amount))) {
-    return res.status(400).json({ error: "El amount debe ser un número positivo." });
+    return res.status(400).json({ error: "The amount must be a positive number." });
   }
   if (transaction_type !== undefined && !isInEnum(transaction_type, ["earn", "spend", "refund"])) {
-    return res.status(400).json({ error: "El tipo de transacción no es válido." });
+    return res.status(400).json({ error: "The transaction type is not valid." });
   }
   if (description !== undefined && description !== null && !isNonEmptyString(description)) {
-    return res.status(400).json({ error: "La descripción debe ser un string válido o null." });
+    return res.status(400).json({ error: "The description must be a valid string or null." });
   }
   if (balance_after !== undefined && !isPositiveNumber(Number(balance_after))) {
-    return res.status(400).json({ error: "El balance_after debe ser un número positivo." });
+    return res.status(400).json({ error: "The balance_after must be a positive number." });
   }
 
   const data = {};
@@ -96,7 +96,7 @@ export const updateTransaction = async (req, res) => {
   }
 };
 
-// Eliminar una transacción
+// Delete a transaction
 export const deleteTransaction = async (req, res) => {
   const { id } = req.params;
   try {

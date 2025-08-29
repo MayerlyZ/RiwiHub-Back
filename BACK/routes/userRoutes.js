@@ -5,11 +5,11 @@ import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = e.Router();
 
-// Rutas públicas
+// Public routes
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 
-// Rutas protegidas
+// Protected routes
 router.get("/", authMiddleware, getAllUsers);
 router.get("/:id", authMiddleware, getUserById);
 router.post("/", authMiddleware, createUser);

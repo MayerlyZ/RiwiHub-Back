@@ -1,6 +1,8 @@
 import User from '../models/User.js';
 import { hashPassword, validatePassword, generateAuthToken } from '../utils/auth.js';
 
+
+// User registration
 export const registerUser = async ({ name, email, password, wallet_balance, role }) => {
   const hashedPassword = await hashPassword(password);
   const user = await User.create({
@@ -13,6 +15,8 @@ export const registerUser = async ({ name, email, password, wallet_balance, role
   return user;
 };
 
+
+// User login
 export const loginUser = async (email, password) => {
   const user = await User.findOne({ where: { email } });
   if (!user) return null;

@@ -1,9 +1,7 @@
 import * as itemService from "../services/itemService.js";
 import { isNonEmptyString, isPositiveNumber, isInEnum } from "../utils/validators.js";
 
-// ===========================
 // GET ALL ITEMS (público)
-// ===========================
 export const getAllItems = async (req, res) => {
   try {
     const items = await itemService.getAllItems();
@@ -14,9 +12,7 @@ export const getAllItems = async (req, res) => {
   }
 };
 
-// ===========================
 // GET ITEM BY ID (público)
-// ===========================
 export const getItemById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -31,33 +27,31 @@ export const getItemById = async (req, res) => {
   }
 };
 
-// ===========================
 // CREATE ITEM (admin y seller)
-// ===========================
 export const createItem = async (req, res) => {
   const { name, description, price, stock, type, price_token, category_id, seller_id } = req.body;
-  // Validaciones
+  // Validations
 
   if (!isNonEmptyString(name)) {
-    return res.status(400).json({ error: "El nombre es requerido y debe ser un string válido." });
+    return res.status(400).json({ error: "The name is required and must be a valid string." });
   }
   if (!isPositiveNumber(Number(price))) {
-    return res.status(400).json({ error: "El precio debe ser un número positivo." });
+    return res.status(400).json({ error: "The price must be a positive number." });
   }
   if (stock !== undefined && !isPositiveNumber(Number(stock))) {
-    return res.status(400).json({ error: "El stock debe ser un número positivo." });
+    return res.status(400).json({ error: "The stock must be a positive number." });
   }
   if (!isInEnum(type, ["product", "service"])) {
-    return res.status(400).json({ error: "El tipo debe ser 'product' o 'service'." });
+    return res.status(400).json({ error: "The type must be 'product' or 'service'." });
   }
   if(price_token !== undefined && price_token !== null && !isPositiveNumber(Number(price_token))) {
-    return res.status(400).json({ error: "El price_token debe ser un número positivo o null." });
+    return res.status(400).json({ error: "The price_token must be a positive number or null." });
   }
   if (!isPositiveNumber(Number(category_id))) {
-    return res.status(400).json({ error: "La categoría es requerida y debe ser un número positivo." });
+    return res.status(400).json({ error: "The category is required and must be a positive number." });
   }
    if (!isPositiveNumber(Number(seller_id))) {
-    return res.status(400).json({ error: "El seller_id es requerido y debe ser un número positivo." });
+    return res.status(400).json({ error: "The seller_id is required and must be a positive number." });
   }
     const data = {
       name,
@@ -79,30 +73,28 @@ export const createItem = async (req, res) => {
   }
 };
 
-// ===========================
 // UPDATE ITEM (admin y seller)
-// ===========================
 export const updateItem = async (req, res) => {
   const { id } = req.params;
   const { name, description, price, stock, type, price_token, category_id } = req.body;
 
   if (name !== undefined && !isNonEmptyString(name)) {
-    return res.status(400).json({ error: "El nombre debe ser un string válido." });
+    return res.status(400).json({ error: "The name must be a valid string." });
   }
   if (price !== undefined && !isPositiveNumber(Number(price))) {
-    return res.status(400).json({ error: "El precio debe ser un número positivo." });
+    return res.status(400).json({ error: "The price must be a positive number." });
   }
   if (stock !== undefined && !isPositiveNumber(Number(stock))) {
-    return res.status(400).json({ error: "El stock debe ser un número positivo." });
+    return res.status(400).json({ error: "The stock must be a positive number." });
   }
   if (type !== undefined && !isInEnum(type, ["product", "service"])) {
-    return res.status(400).json({ error: "El tipo debe ser 'product' o 'service'." });
+    return res.status(400).json({ error: "The type must be 'product' or 'service'." });
   }
   if (price_token !== undefined && price_token !== null && !isPositiveNumber(Number(price_token))) {
-    return res.status(400).json({ error: "El price_token debe ser un número positivo o null." });
+    return res.status(400).json({ error: "The price_token must be a positive number or null." });
   }
   if (category_id !== undefined && !isPositiveNumber(Number(category_id))) {
-    return res.status(400).json({ error: "La categoría debe ser un número positivo." });
+    return res.status(400).json({ error: "The category must be a positive number." });
   }
 
   // Construction of the data object
@@ -122,7 +114,7 @@ export const updateItem = async (req, res) => {
       return res.status(404).json({ error: "Item not found" });
     }
 
-    // 🔹 Permisos: seller solo puede editar sus productos
+    //Permissions: seller can only edit your products
     if (req.user.role === "seller" && item.seller_id !== req.user.id) {
       return res.status(403).json({ error: "You cannot edit another seller's product" });
     }
@@ -135,9 +127,7 @@ export const updateItem = async (req, res) => {
   }
 };
 
-// ===========================
 // DELETE ITEM (admin y seller)
-// ===========================
 export const deleteItem = async (req, res) => {
   const { id } = req.params;
 
@@ -145,9 +135,9 @@ export const deleteItem = async (req, res) => {
     const item = await itemService.getItemById(id);
     if (!item){
     return res.status(404).json({ error: "Item not found" });
-    } 
-    
-    // 🔹 Permisos: seller solo puede borrar sus productos
+    }
+
+    //Permissions: seller can only delete your products
     if (req.user.role === "seller" && item.seller_id !== req.user.id) {
       return res.status(403).json({ error: "You cannot delete another seller's product" });
     }

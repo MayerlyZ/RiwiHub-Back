@@ -11,40 +11,40 @@ import Order from "../models/order.js";
  * @returns {Promise<object>} - JSON-safe summary
  */
 export async function computeDailyReport(dateISO) {
-  // -- Validación mínima de entrada
+  // -- Minimum entry validation
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateISO)) {
     throw new Error("Invalid date format. Use YYYY-MM-DD.");
   }
 
-  // -- Bogotá no maneja DST; offset fijo -05:00. Armamos el rango local del día
+  // -- Bogotá does not handle DST; fixed offset -05:00. We put together the local range of the day
   const start = new Date(`${dateISO}T00:00:00.000-05:00`);
   const end = new Date(`${dateISO}T23:59:59.999-05:00`);
 
-  // -- Filtro base por fecha de creación (createdAt) dentro del día local
+  // -- Base filter by creation date (createdAt) within the local day
   const where = {
     createdAt: { [Op.between]: [start, end] },
-    // Si tu tabla de órdenes tuviera un estado (p.ej. "status" o "order_status"),
-    // podrías filtrar aquí solo "paid"/"completed".
+    // If your orders table had a status (e.g. "status" or "order_status"),
+    // you could filter here only "paid"/"completed".
     // status: { [Op.in]: ["paid", "completed"] }
   };
 
-  // -- Traemos solo lo necesario para sumar
+  // -- We bring only what is necessary to add up the KPIs
   const orders = await Order.findAll({
     where,
-    attributes: ["total_amount", "payment_method"], // evita traer columnas extra
+    attributes: ["total_amount", "payment_method"], // avoids bringing extra columns
     raw: true,
   });
 
-  // -- Cálculo de KPIs básicos
+  // -- Basic KPI calculations
   let grossRevenue = 0;
   const byPaymentMethod = { wallet: 0, credit_card: 0, cash: 0 };
 
   for (const o of orders) {
-    // Aseguramos número en JS
+    // Ensure number in JS
     const amt = Number(o.total_amount);
     grossRevenue += isNaN(amt) ? 0 : amt;
 
-    // Suma por método de pago si está dentro de los tres definidos en el modelo
+    // Sum by payment method if it's within the three defined in the model
     if (o.payment_method && byPaymentMethod.hasOwnProperty(o.payment_method)) {
       byPaymentMethod[o.payment_method] += isNaN(amt) ? 0 : amt;
     }
@@ -53,7 +53,7 @@ export async function computeDailyReport(dateISO) {
   const ordersCount = orders.length;
   const averageTicket = ordersCount > 0 ? +(grossRevenue / ordersCount).toFixed(2) : 0;
 
-  // -- Respuesta JSON 
+  // -- JSON response
   return {
     date: dateISO,
     timezone: "America/Bogota",

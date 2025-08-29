@@ -31,16 +31,16 @@ export const getOrderById = async (req, res) => {
 export const createOrder = async (req, res) => {
   const { user_id, total_amount, status, payment_method } = req.body;
   if (!isPositiveNumber(Number(user_id))) {
-    return res.status(400).json({ error: "El user_id es requerido y debe ser un número positivo." });
+    return res.status(400).json({ error: "The user_id is required and must be a positive number." });
   }
   if (!isInEnum(status, ["pending", "paid", "shipped", "completed", "cancelled"])) {
-    return res.status(400).json({ error: "El status no es válido." });
+    return res.status(400).json({ error: "The status is not valid." });
   }
   if (!isPositiveNumber(Number(total_amount))) {
-    return res.status(400).json({ error: "El total_amount debe ser un número positivo." });
+    return res.status(400).json({ error: "The total_amount must be a positive number." });
   }
   if (payment_method !== undefined && payment_method !== null && !isInEnum(payment_method, ["wallet", "credit_card", "cash"])) {
-    return res.status(400).json({ error: "El método de pago no es válido." });
+    return res.status(400).json({ error: "The payment method is not valid." });
   }
   try {
     const newOrder = await orderServices.createOrder({
@@ -61,16 +61,16 @@ export const updateOrder = async (req, res) => {
   const { id } = req.params;
   const { user_id, status, total_amount } = req.body;
   if (user_id !== undefined && !isPositiveNumber(Number(user_id))) {
-    return res.status(400).json({ error: "El user_id debe ser un número positivo." });
+    return res.status(400).json({ error: "The user_id must be a positive number." });
   }
   if (status !== undefined && !isInEnum(status, ["pending", "paid", "shipped", "completed", "cancelled"])) {
-    return res.status(400).json({ error: "El status no es válido." });
+    return res.status(400).json({ error: "The status is not valid." });
   }
   if (total_amount !== undefined && !isPositiveNumber(Number(total_amount))) {
-    return res.status(400).json({ error: "El total_amount debe ser un número positivo." });
+    return res.status(400).json({ error: "The total_amount must be a positive number." });
   }
   if (payment_method !== undefined && payment_method !== null && !isInEnum(payment_method, ["wallet", "credit_card", "cash"])) {
-    return res.status(400).json({ error: "El método de pago no es válido." });
+    return res.status(400).json({ error: "The payment method is not valid." });
   }
 
   const data = {};

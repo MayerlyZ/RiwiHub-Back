@@ -16,7 +16,7 @@ const TokenTransaction = sequelize.define("TokenTransaction", {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
     validate: {
-      min: 0.01, // cumple con el CHECK (amount > 0)
+      min: 0.01,
     },
   },
   transaction_type: {

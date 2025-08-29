@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// Configurar las variables de entorno según FreeDB.tech
+// Configure environment variables according to FreeDB.tech
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
   host: process.env.DB_HOST,
   dialect: "mysql",
@@ -17,19 +17,5 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     idle: 10000
   }
 });
-
-// Verificar la conexión
-(async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Conexión a la base de datos establecida con éxito.');
-  } catch (error) {
-    console.error('No se pudo conectar a la base de datos:', error);
-  }
-})();
-
-// Importar asociaciones
-import createAssociations from "../models/associations.js";
-createAssociations();
 
 export default sequelize;

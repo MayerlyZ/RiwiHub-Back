@@ -26,6 +26,3 @@ temp/
 
 # Archivos de cobertura de tests
 coverage/
-
-front/
-index.html

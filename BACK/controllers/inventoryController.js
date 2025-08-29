@@ -9,7 +9,7 @@ import {
   checkLowStock,
 } from "../services/inventoryService.js";
 
-// Crear inventario (solo admin)
+//Create inventory (admin and sellers only)
 export const createInventory = async (req, res) => {
   try {
     const entry = await createInventoryEntry(req.body);
@@ -19,7 +19,7 @@ export const createInventory = async (req, res) => {
   }
 };
 
-// Listar inventario (admin ve todos, seller solo los suyos)
+//List inventory (admin sees all, seller only yours)
 export const listInventory = async (req, res) => {
   try {
     const where = {};
@@ -33,13 +33,13 @@ export const listInventory = async (req, res) => {
   }
 };
 
-// Obtener un inventario por id
+//Get an inventory by id
 export const getInventory = async (req, res) => {
   try {
     const inv = await getInventoryById(req.params.id);
     if (!inv) return res.status(404).json({ error: "Not found" });
 
-    // Seller solo puede ver sus productos
+    // Seller can only see their own products
     if (req.user.role === "seller" && inv.Item.seller_id !== req.user.id) {
       return res.status(403).json({ error: "Forbidden" });
     }
@@ -50,7 +50,7 @@ export const getInventory = async (req, res) => {
   }
 };
 
-// Actualizar inventario
+// Update inventory
 export const updateInventoryController = async (req, res) => {
   try {
     const inv = await getInventoryById(req.params.id);
@@ -67,9 +67,16 @@ export const updateInventoryController = async (req, res) => {
   }
 };
 
-// Eliminar inventario (solo admin)
+// Delete inventory (admin and seller only)
 export const deleteInventoryController = async (req, res) => {
   try {
+    const inv = await getInventoryById(req.params.id);
+    if (!inv) return res.status(404).json({ error: "Not found" });
+
+    if (req.user.role === "seller" && inv.Item.seller_id !== req.user.id) {
+      return res.status(403).json({ error: "You cannot delete another seller's inventory" });
+    }
+
     const result = await deleteInventory(req.params.id);
     res.json(result);
   } catch (err) {
@@ -77,7 +84,7 @@ export const deleteInventoryController = async (req, res) => {
   }
 };
 
-// Alertas de bajo stock
+//Low stock alerts
 export const lowStockAlert = async (req, res) => {
   try {
     const where = {};

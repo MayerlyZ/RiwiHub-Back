@@ -63,7 +63,4 @@ export default function createAssociations() {
   // =========================
   Order.hasMany(OrderItem, { foreignKey: "order_id", as: "orderItems" });
   OrderItem.belongsTo(Order, { foreignKey: "order_id", as: "order" });
-
-  User.hasMany(Order, { foreignKey: "user_id", as: "orders" });
-  Order.belongsTo(User, { foreignKey: "user_id", as: "user" });
 }
