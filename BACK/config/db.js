@@ -2,7 +2,7 @@
 
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
-import fs from "fs"; // -> NECESITAS ESTA LÍNEA para leer archivos
+import fs from "fs"; 
 
 dotenv.config();
 
@@ -14,7 +14,6 @@ if (!caPath) {
 }
 
 const sequelize = new Sequelize(
-  // En tu .env, asegúrate de que la variable se llame DB_DATABASE, no DB_NAME
   process.env.DB_DATABASE,
   process.env.DB_USER,
   process.env.DB_PASSWORD,
@@ -25,9 +24,6 @@ const sequelize = new Sequelize(
     port: process.env.DB_PORT,
     logging: false,
 
-    // =======================================================
-    // -> ESTA ES LA PARTE CRÍTICA QUE TE FALTA
-    // =======================================================
     dialectOptions: {
       ssl: {
         ca: fs.readFileSync(caPath),

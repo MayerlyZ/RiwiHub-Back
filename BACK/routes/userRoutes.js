@@ -12,7 +12,7 @@ router.post("/login", loginUser);
 // Protected routes
 router.get("/", authMiddleware, getAllUsers);
 router.get("/:id", authMiddleware, getUserById);
-router.post("/", authMiddleware, createUser);
+router.post("/", createUser);
 router.put("/:id", authMiddleware, updateUser);
 router.delete("/:id", authMiddleware, deleteUser);
 
