@@ -26,7 +26,7 @@ export const registerUser = async (req, res) => {
       return res.status(409).json({ error: "Email already in use" });
     }
 
-    const newUser = await authService.registerUser({ name, email, password, wallet_balance: 0, role: "buyer" });
+    const newUser = await authService.registerUser({ name, email, password, wallet_balance: 0, role});
 
     const userObj = newUser.toJSON ? newUser.toJSON() : newUser;
     delete userObj.password;    
