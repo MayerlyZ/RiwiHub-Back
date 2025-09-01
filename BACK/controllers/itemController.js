@@ -29,7 +29,9 @@ export const getItemById = async (req, res) => {
 
 // CREATE ITEM (admin y seller)
 export const createItem = async (req, res) => {
-  const { name, description, price, stock, type, price_token, category_id, seller_id } = req.body;
+  console.log("Usuario autenticado:", req.user);
+  const { name, description, price, stock, type, price_token, category_id } = req.body;
+  const seller_id = req.user.id;
   // Validations
 
   if (!isNonEmptyString(name)) {
@@ -50,19 +52,17 @@ export const createItem = async (req, res) => {
   if (!isPositiveNumber(Number(category_id))) {
     return res.status(400).json({ error: "The category is required and must be a positive number." });
   }
-   if (!isPositiveNumber(Number(seller_id))) {
-    return res.status(400).json({ error: "The seller_id is required and must be a positive number." });
-  }
-    const data = {
-      name,
-      description,
-      price,
-      stock: stock ?? 0,
-      type,
-      price_token,
-      category_id,
-      seller_id: req.user.role === "seller" ? req.user.id : seller_id,
-    };
+  // No validar seller_id del body, solo usar el del token
+  const data = {
+    name,
+    description,
+    price,
+    stock: stock ?? 0,
+    type,
+    price_token,
+    category_id,
+    seller_id
+  };
 
   try {
     const newItem = await itemService.createItem(data);
