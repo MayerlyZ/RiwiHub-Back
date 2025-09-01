@@ -11,8 +11,8 @@ export const getItemById = async (id) => {
 };
 
 // Create item
-export const createItem = async ({ name, description, price, price_token, stock, type, category_id }) => {
-  return await Item.create({ name, description, price, price_token, stock, type, category_id });
+export const createItem = async ({ name, description, price, price_token, stock, type, category_id, seller_id }) => {
+  return await Item.create({ name, description, price, price_token, stock, type, category_id, seller_id });
 };
 
 // Update item
