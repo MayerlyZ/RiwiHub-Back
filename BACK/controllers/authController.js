@@ -1,6 +1,5 @@
 import * as authService from '../services/authService.js';
 import { generateAuthToken } from '../utils/auth.js';
-import bcrypt from "bcryptjs";
 
 // Login user
 export const loginUser = async (req, res) => {
@@ -19,14 +18,14 @@ export const loginUser = async (req, res) => {
 
 // Register user
 export const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
   try {
     const existingUser = await authService.getUserByEmail(email);
     if (existingUser) {
       return res.status(409).json({ error: "Email already in use" });
     }
 
-    const newUser = await authService.registerUser({ name, email, password, wallet_balance: 0, role: "buyer" });
+    const newUser = await authService.registerUser({ name, email, password, wallet_balance: 0, role});
 
     const userObj = newUser.toJSON ? newUser.toJSON() : newUser;
     delete userObj.password;    
