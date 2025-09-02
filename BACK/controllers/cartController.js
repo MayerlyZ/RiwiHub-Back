@@ -45,10 +45,9 @@ export const getCartContents = async (req, res) => {
   const user_id = req.user.id;
   
   try {
-    const cart = await cartService.getCartByUserId(user_id); //Check if the user has a cart
-
+    const cart = await cartService.getCartByUserId(user_id);
     if (cart) {
-      res.status(200).json(cart.items); // Get the user's cart
+      res.status(200).json(cart); // Devuelve toda la estructura del carrito
     } else {
       res.status(404).json({ message: 'Cart not found' });
     }
