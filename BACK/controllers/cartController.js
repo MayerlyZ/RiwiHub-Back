@@ -13,8 +13,9 @@ export const addItemToCart = async (req, res) => {
     const cartItem = await cartService.addItemToCart(user_id, item_id, quantity);
     res.status(201).json(cartItem);
   } catch (error) {
-    res.status(500).json({ error: "Error adding item to cart" });
-  }
+  console.error("Error real al agregar item al carrito:", error);
+  res.status(500).json({ error: "Error adding item to cart", details: error.message });
+}
 
 };
 

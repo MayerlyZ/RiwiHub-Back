@@ -1,5 +1,7 @@
 import CartItem from '../models/cartItem.js';
-import ShoppingCart from '../models/shoppingCart.js'; // o cart.js, según tu proyecto
+import Item from '../models/item.js';
+import ShoppingCart from '../models/shoppingCart.js'; 
+import { Op } from 'sequelize';
 
 export const addItemToCart = async (user_id, item_id, quantity) => {
 
@@ -11,16 +13,22 @@ export const addItemToCart = async (user_id, item_id, quantity) => {
     cart = await ShoppingCart.create({ user_id });
   }
 
+  // Get the item's price
+  const item = await Item.findByPk(item_id);
+  if (!item) throw new Error('Item not found');
+  const unit_price = Number(item.price);
+
   // Search for the cart item
   let cartItem = await CartItem.findOne({ where: { cart_id: cart.cart_id, item_id } });
 
   if (cartItem) {
-    // If the item is already in the cart, update the quantity
+    // If the item is already in the cart, update the quantity and unit_price
     cartItem.quantity += quantity;
+    cartItem.unit_price = unit_price;
     await cartItem.save();
   } else {
     // If the item is not in the cart, add it
-    cartItem = await CartItem.create({ cart_id: cart.cart_id, item_id, quantity });
+    cartItem = await CartItem.create({ cart_id: cart.cart_id, item_id, quantity, unit_price });
   }
   return cartItem;
 };
@@ -41,8 +49,41 @@ export const getCartContents = async (user_id) => {
 };
 
 // Get the cart by user ID
+
 export const getCartByUserId = async (user_id) => {
-  return await ShoppingCart.findOne({ 
-    where: { user_id }, 
-    include: [{ model: CartItem, as: 'cartItems' }] });
+  const cart = await ShoppingCart.findOne({
+    where: { user_id },
+    include: [{ model: CartItem, as: 'cartItems', include: [{ model: Item, as: 'item' }] }]
+  });
+  if (!cart) return null;
+
+  // Map cartItems to include product details
+  const items = cart.cartItems.map(cartItem => {
+    const product = cartItem.item;
+    return {
+      cart_item_id: cartItem.cart_item_id,
+      item_id: cartItem.item_id,
+      quantity: cartItem.quantity,
+      unit_price: Number(cartItem.unit_price),
+      subtotal: Number(cartItem.subtotal),
+      // Detalles del producto
+      name: product?.name,
+      description: product?.description,
+      image: product?.image || null,
+      price: Number(product?.price),
+      type: product?.type,
+      category_id: product?.category_id,
+      seller_id: product?.seller_id
+    };
+  });
+
+  // Calcular el total del carrito
+  const total = items.reduce((sum, item) => sum + (item.subtotal || 0), 0);
+
+  return {
+    cart_id: cart.cart_id,
+    user_id: cart.user_id,
+    items,
+    total
+  };
 };

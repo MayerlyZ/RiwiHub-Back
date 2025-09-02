@@ -28,7 +28,7 @@ const CartItem = sequelize.define('CartItem', {
   },
   subtotal: {
     type: DataTypes.DECIMAL(10, 2),
-    allowNull: false,
+    allowNull: true,
     get() {
       return this.getDataValue('subtotal');
     },
