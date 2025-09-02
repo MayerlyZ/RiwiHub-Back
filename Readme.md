@@ -199,5 +199,3 @@ Authorization: Bearer <your_jwt_token_here>
 - Check the source code for more details on validations and error responses.
 
 ---
-
-If you have questions about any endpoint or need usage examples with Postman,
