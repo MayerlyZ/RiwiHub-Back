@@ -66,14 +66,17 @@ export const getCartByUserId = async (user_id) => {
       quantity: cartItem.quantity,
       unit_price: Number(cartItem.unit_price),
       subtotal: Number(cartItem.subtotal),
+
       // Detalles del producto
-      name: product?.name,
-      description: product?.description,
-      image: product?.image || null,
-      price: Number(product?.price),
-      type: product?.type,
-      category_id: product?.category_id,
-      seller_id: product?.seller_id
+      item: { 
+        name: cartItem.item?.name,
+        description: cartItem.item?.description,
+        image_url: cartItem.item?.image || null,
+        price: Number(cartItem.item?.price),
+        type: cartItem.item?.type,
+        category_id: cartItem.item?.category_id,
+        seller_id: cartItem.item?.seller_id
+      }
     };
   });
 
