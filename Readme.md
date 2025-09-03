@@ -4,6 +4,46 @@ Backend for an e-commerce platform with role system, JWT authentication, and mod
 
 ---
 
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 16.x
+- npm >= 8.x
+- MySQL database (you can use Aiven, PlanetScale, etc.)
+
+### Installation
+
+1. Clone the repository:
+  ```bash
+  git clone https://github.com/MayerlyZ/RiwiHub-Back.git
+  cd RiwiHub-Back
+  ```
+2. Install dependencies:
+  ```bash
+  npm install
+  ```
+3. Create a `.env` file in the root of the project with the following content (adjust the values for your environment):
+  ```env
+  JWT_SECRET=your_jwt_secret
+  DB_HOST=your_db_host
+  DB_USER=your_db_user
+  DB_PASSWORD=your_db_password
+  DB_PORT=your_db_port
+  DB_DATABASE=your_db_name
+  DB_SSL_CA_PATH=aiven-ca.pem
+  PORT=3000
+  ```
+4. Make sure you have the certificate file (e.g., `aiven-ca.pem`) if your database requires it.
+
+### Running the Server
+
+Start the server in development mode:
+```bash
+npm start
+```
+By default, the server will run at `http://localhost:3000`.
+
 ## Project Overview
 
 This backend powers an e-commerce platform with a well-defined role system. It uses **Node.js** with **Express.js** to create a RESTful API. Data persistence is handled with **Sequelize** and **MySQL**. Route security is managed with **JSON Web Tokens (JWT)**, ensuring that only authenticated users with the appropriate permissions can perform certain actions.
@@ -199,3 +239,9 @@ Authorization: Bearer <your_jwt_token_here>
 - Check the source code for more details on validations and error responses.
 
 ---
+
+## Contact
+
+Project developed by MayerlyZ and collaborators.
+
+For questions or suggestions, you can open an issue in the repository or contact me via GitHub.
